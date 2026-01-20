@@ -1,59 +1,49 @@
-# Exercice Class Robot
+class Robot:
+    marque = "FANUC"
 
-```mermaid
-classDiagram
-   class Robot {
-      +str marque
-      +bool state_OK
-      +int nb_alarme
-      +list~int~ pos_Tool
-      +GetStatus()
-      +MoveHome()
-      +MovePick()
-      +MovePlace()
-      +RaiseDefault()
-      +ClearDefault()
-   }
-```
-marque = FANUC
+    def __init__(self):
+        self.state_OK = True
+        self.nb_alarme = 0
+        self.pos_Tool = [0, 0, 0]
 
-## Affichage GetStatus()
+    def MoveHome(self):
+        self.pos_Tool = [10, 10, 500]
 
-| marque | state_OK | nb_alarme | X | Y | Z |
-|---|---|---|---|---|---|
-| FANUC | True | 0 | 10 | 10 | 500 |
+    def MovePick(self):
+        self.pos_Tool = [100, 30, 120]
 
-mise en forme => FANUC Status OK (0) Position X=10 Y=10 Z=500
+    def MovePlace(self):
+        self.pos_Tool = [100, 150, 230]
 
-## Valeurs position Tool
+    def RaiseDefault(self):
+        self.state_OK = False
+        self.nb_alarme += 1
 
-| Position  | X  | Y  |  Z |
-|---|---|---|---|
-| init  | 0 | 0 | 0 |
-| Home  | 10 | 10 | 500 |
-| Pick  | 100 | 30 | 120 |
-| Place  | 100 | 150 | 230 |
+    def ClearDefault(self):
+        self.state_OK = True
 
-## Gestion defaut
+    def GetStatus(self):
+        if self.state_OK:
+            status_text = "OK"
+        else:
+            status_text = "NOK"
 
-### RaiseDefault()
+        # Affichage selon le format : FANUC Status OK (0) Position X=...
+        print("{} Status {} ({}) Position X={} Y={} Z={}".format(
+            self.marque,
+            status_text,
+            self.nb_alarme,
+            self.pos_Tool[0],
+            self.pos_Tool[1],
+            self.pos_Tool[2]
+        ))
 
-- state_OK = False 
-- nb_alarme = nb_alarme + 1
+if __name__ == "__main__":
+    print(Robot.marque)
 
-### ClearDefault()
+    rob1 = Robot()
+    rob2 = Robot()
 
-- state_OK = True 
-
-## Jeu de test
-
-```
-    print(Robot.marque) # utilisation attribut de class sans instanciation
-
-    rob1 = Robot() # premiere instance de robot
-    rob2 = Robot() # seconde instance de robot
-
-    # Ordres sur robot 1
     rob1.GetStatus()
     rob1.MoveHome()
     rob1.RaiseDefault()
@@ -61,8 +51,6 @@ mise en forme => FANUC Status OK (0) Position X=10 Y=10 Z=500
     rob1.ClearDefault()
     rob1.GetStatus()
 
-    # Ordres sur robot 2
     rob2.GetStatus()
     rob2.RaiseDefault()
     rob2.GetStatus()
-```
